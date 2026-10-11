@@ -6,6 +6,7 @@ import { Chapter } from '@renderer/types/book'
 import { useState } from 'react'
 
 import { getWordCount } from '@renderer/utils/textStats'
+import PageHeader from '../search/PageHeader'
 
 type HomePageProps = {
   book: BookRecord
@@ -31,9 +32,7 @@ function HomePage({
   if (settingsOpen) {
     return (
       <main className="home-area">
-        <header className="editor-header">
-          <span>Configurações do projeto</span>
-        </header>
+        <PageHeader title="Configurações do projeto" />
 
         <div className="home-content">
           <BookSettings book={book} onUpdate={onUpdateBook} onBack={() => setSettingsOpen(false)} />
@@ -44,9 +43,7 @@ function HomePage({
 
   return (
     <main className="home-area">
-      <header className="editor-header">
-        <span>Visão geral</span>
-      </header>
+      <PageHeader title="Visão geral" />
 
       <div className="home-content">
         <div className="home-heading">

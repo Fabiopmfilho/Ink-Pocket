@@ -7,6 +7,7 @@ import type { Chapter } from '../../types/book'
 
 import SortableSceneCard from './SortableSceneCard'
 import { getWordCount } from '../../utils/textStats'
+import PageHeader from '../search/PageHeader'
 
 type ChapterView = 'board' | 'compiled'
 
@@ -50,9 +51,7 @@ function ChapterOverview({
 
   return (
     <main className="chapter-overview">
-      <header className="editor-header">
-        <span>{chapter.title || 'Capítulo sem título'}</span>
-      </header>
+      <PageHeader title={chapter.title || 'Capítulo sem título'} />
 
       <div className="chapter-overview-content">
         <div className="chapter-overview-heading">

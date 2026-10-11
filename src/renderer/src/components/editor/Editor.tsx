@@ -5,6 +5,7 @@ import { useDebouncedSave } from '../../hooks/useDebouncedSave'
 import type { Chapter } from '../../types/book'
 
 import RichTextEditor, { type EditorSaveStatus } from './RichTextEditor'
+import PageHeader from '../search/PageHeader'
 
 type EditorProps = {
   chapter: Chapter
@@ -56,9 +57,7 @@ function Editor({
 
   return (
     <main className="editor-area">
-      <header className="editor-header">
-        <span>{title || fallbackTitle}</span>
-      </header>
+      <PageHeader title={title || fallbackTitle} />
 
       <div className="editor-toolbar-slot" ref={setToolbarSlot} />
 
