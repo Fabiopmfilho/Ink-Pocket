@@ -31,6 +31,8 @@ export function useKeyboardShortcuts({
         return
       }
 
+      if (event.repeat) return
+
       if (event.shiftKey && key === 'f') {
         event.preventDefault()
         onToggleFocusMode()
@@ -43,18 +45,18 @@ export function useKeyboardShortcuts({
         return
       }
 
-      if (event.shiftKey && key === 'b') {
+      if (key === '\\' && !event.shiftKey && !event.altKey) {
         event.preventDefault()
         onToggleSidebar()
         return
       }
 
-      if (event.altKey && key === 'i') {
+      if (event.altKey && event.code === 'KeyI') {
         event.preventDefault()
         onToggleInspector()
       }
 
-      if (key === 'p' && !event.shiftKey && !event.altKey) {
+      if (key === 'k' && !event.shiftKey && !event.altKey) {
         event.preventDefault()
         onOpenQuickSearch()
         return

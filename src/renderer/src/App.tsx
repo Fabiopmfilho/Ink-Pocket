@@ -20,7 +20,9 @@ import type {
 import type { Chapter } from './types/book'
 
 import { useBookData } from './hooks/useBookData'
+import { useAutoBackup } from './hooks/useAutoBackup'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+
 import { getCharacterCount, getWordCount } from './utils/textStats'
 
 import { updateBookRecord } from './services/bookService'
@@ -64,6 +66,8 @@ function App() {
 
   const { activeBookId, book, documents, characters, locations, loading } = useBookData()
 
+  useAutoBackup(activeBookId)
+
   useKeyboardShortcuts({
     focusMode,
     onToggleFocusMode: () => {
@@ -89,7 +93,7 @@ function App() {
   const searchTrigger = useMemo(
     () => ({
       onOpen: () => setQuickSearchOpen(true),
-      shortcut: 'Ctrl+K' // troque pela tecla real do seu onOpenQuickSearch, ou apague a linha
+      shortcut: /mac/i.test(navigator.userAgent) ? '⌘K' : 'Ctrl+K'
     }),
     []
   )
