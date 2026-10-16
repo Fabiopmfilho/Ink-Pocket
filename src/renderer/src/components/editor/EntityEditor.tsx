@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react'
 import type { CharacterRecord, LocationRecord } from '../../database/models'
 
 import RichTextEditor, { type EditorSaveStatus } from './RichTextEditor'
+import PageHeader from '../search/PageHeader'
 
 type EditableEntity = {
   name: string
@@ -51,9 +52,7 @@ function EntityEditor({
 
   return (
     <main className="editor-area">
-      <header className="editor-header">
-        <span>{entityLabel}</span>
-      </header>
+      <PageHeader title={entityLabel} />
 
       <div className="editor character-editor">
         <input

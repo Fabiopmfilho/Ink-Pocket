@@ -5,18 +5,16 @@ import BookSettings from './BookSettings'
 import { Chapter } from '@renderer/types/book'
 import { useState } from 'react'
 
+import { getWordCount } from '@renderer/utils/textStats'
+import PageHeader from '../search/PageHeader'
+import BackupPanel from './BackupPanel'
+
 type HomePageProps = {
   book: BookRecord
   documents: Chapter[]
   onOpenChapter: (id: string) => void
   onCreateChapter: () => void
   onUpdateBook: (field: BookEditableField, value: string | number) => void | Promise<void>
-}
-
-function getWordCount(content: string): number {
-  const text = new DOMParser().parseFromString(content, 'text/html').body.textContent?.trim() ?? ''
-
-  return text ? text.split(/\s+/).length : 0
 }
 
 function HomePage({
@@ -35,12 +33,18 @@ function HomePage({
   if (settingsOpen) {
     return (
       <main className="home-area">
-        <header className="editor-header">
-          <span>Configurações do projeto</span>
-        </header>
+        <PageHeader title="Configurações do projeto" />
 
         <div className="home-content">
-          <BookSettings book={book} onUpdate={onUpdateBook} onBack={() => setSettingsOpen(false)} />
+          <div className="home-content">
+            <BookSettings
+              book={book}
+              onUpdate={onUpdateBook}
+              onBack={() => setSettingsOpen(false)}
+            />
+
+            <BackupPanel book={book} />
+          </div>
         </div>
       </main>
     )
@@ -48,9 +52,7 @@ function HomePage({
 
   return (
     <main className="home-area">
-      <header className="editor-header">
-        <span>Visão geral</span>
-      </header>
+      <PageHeader title="Visão geral" />
 
       <div className="home-content">
         <div className="home-heading">

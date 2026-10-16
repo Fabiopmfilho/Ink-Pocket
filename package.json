@@ -1,10 +1,10 @@
 {
-  "name": "book-writer",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "name": "ink-pocket",
+  "version": "1.0.1",
+  "description": "Keep your ideas close.",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "Fabio Filho",
+  "homepage": "https://github.com/Fabiopmfilho/book-writer",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -26,13 +26,20 @@
     "@dnd-kit/react": "^0.5.0",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@tiptap/core": "3.31.3",
+    "@tiptap/extension-highlight": "^3.31.3",
     "@tiptap/extension-mention": "^3.31.3",
+    "@tiptap/extension-text-align": "3.31.3",
+    "@tiptap/extension-text-style": "3.31.3",
+    "@tiptap/extension-typography": "^3.31.3",
+    "@tiptap/extensions": "3.31.3",
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
     "@tiptap/suggestion": "^3.31.3",
     "dexie": "^4.4.5",
-    "dexie-react-hooks": "^4.4.0"
+    "dexie-react-hooks": "^4.4.0",
+    "lucide-react": "^1.55.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

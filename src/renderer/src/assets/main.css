@@ -7,3 +7,6 @@
 @import './styles/home.css';
 @import './styles/drag-and-drop.css';
 @import './styles/manuscript.css';
+@import './styles/quick-search.css';
+@import './styles/header-search.css';
+@import './styles/backup-panel.css';

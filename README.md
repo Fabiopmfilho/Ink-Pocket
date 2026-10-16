@@ -1,4 +1,6 @@
-# Book Writer
+# Ink Poket
+
+## Keep your ideas close.
 
 Desktop application for writing and organizing books, inspired by tools such as Scrivener.
 

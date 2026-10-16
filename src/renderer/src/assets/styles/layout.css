@@ -90,3 +90,19 @@
 .app.inspector-hidden .editor-header {
   padding-right: 58px;
 }
+
+/* Focus mode */
+.app.focus-mode {
+  grid-template-columns: 0 minmax(0, 1fr) 0;
+}
+
+.app.focus-mode .sidebar,
+.app.focus-mode .inspector {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app.focus-mode .panel-toggle {
+  display: none;
+}

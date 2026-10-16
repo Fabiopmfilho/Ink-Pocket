@@ -294,6 +294,27 @@
   line-height: 1.8;
 }
 
+.editor-document.manuscript-editor {
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  padding-bottom: 40vh;
+}
+
+.editor-document.manuscript-editor p {
+  margin: 0;
+  text-indent: 1.5em;
+}
+
+.editor-document.manuscript-editor > p:first-child,
+.editor-document.manuscript-editor h1 + p,
+.editor-document.manuscript-editor h2 + p,
+.editor-document.manuscript-editor h3 + p,
+.editor-document.manuscript-editor hr + p,
+.editor-document.manuscript-editor li p,
+.editor-document.manuscript-editor blockquote p {
+  text-indent: 0;
+}
+
 @media (max-width: 850px) {
   .chapter-overview-content {
     padding: 28px 24px;

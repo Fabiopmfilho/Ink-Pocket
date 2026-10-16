@@ -151,6 +151,18 @@
   gap: 10px;
 }
 
+.primary-button {
+  border: 1px solid #55458a !important;
+  background: #55458a;
+  color: #fff;
+  border-radius: 7px;
+}
+
+.primary-button:hover {
+  background: #6c5bb0;
+  border-color: #6c5bb0 !important;
+}
+
 .secondary-button {
   border: 1px solid #ccc !important;
   background: transparent !important;

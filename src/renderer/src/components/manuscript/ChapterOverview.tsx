@@ -6,6 +6,8 @@ import { isSortable } from '@dnd-kit/react/sortable'
 import type { Chapter } from '../../types/book'
 
 import SortableSceneCard from './SortableSceneCard'
+import { getWordCount } from '../../utils/textStats'
+import PageHeader from '../search/PageHeader'
 
 type ChapterView = 'board' | 'compiled'
 
@@ -16,12 +18,6 @@ type ChapterOverviewProps = {
   onCreateScene: () => void
   onDeleteScene: (sceneId: string) => void
   onReorderScenes: (sceneIds: string[]) => void
-}
-
-function getWordCount(content: string): number {
-  const text = new DOMParser().parseFromString(content, 'text/html').body.textContent?.trim() ?? ''
-
-  return text ? text.split(/\s+/).length : 0
 }
 
 function ChapterOverview({
@@ -36,7 +32,9 @@ function ChapterOverview({
 
   const orderedScenes = [...scenes].sort((first, second) => first.order - second.order)
 
-  const totalWords = orderedScenes.reduce((total, scene) => total + getWordCount(scene.content), 0)
+  const totalWords =
+    getWordCount(chapter.content) +
+    orderedScenes.reduce((total, scene) => total + getWordCount(scene.content), 0)
 
   function reorderScenes(initialIndex: number, finalIndex: number) {
     if (initialIndex === finalIndex) return
@@ -53,9 +51,7 @@ function ChapterOverview({
 
   return (
     <main className="chapter-overview">
-      <header className="editor-header">
-        <span>{chapter.title || 'Capítulo sem título'}</span>
-      </header>
+      <PageHeader title={chapter.title || 'Capítulo sem título'} />
 
       <div className="chapter-overview-content">
         <div className="chapter-overview-heading">

@@ -1,12 +1,19 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
-import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import Highlight from '@tiptap/extension-highlight'
+import Typography from '@tiptap/extension-typography'
+import TextAlign from '@tiptap/extension-text-align'
+import { Color, FontFamily, FontSize, TextStyle } from '@tiptap/extension-text-style'
+import { CharacterCount, Placeholder } from '@tiptap/extensions'
+import { EditorContent, useEditor } from '@tiptap/react'
 
 import type { CharacterRecord, LocationRecord } from '../../database/models'
 import { useDebouncedSave } from '../../hooks/useDebouncedSave'
-import { createReferenceMention } from './referenceMention'
+import { DialogueDash } from './DialogueDash'
 import EditorToolbar from './EditorToolbar'
+import { createReferenceMention } from './referenceMention'
 
 export type EditorSaveStatus = 'editing' | 'saving' | 'saved' | 'error'
 
@@ -20,6 +27,8 @@ type RichTextEditorProps = {
   onSave: (content: string) => void | Promise<void>
   onOpenReference: (entityId: string) => void
   onSaveStatusChange?: (status: EditorSaveStatus) => void
+  onWordCountChange?: (words: number) => void
+  toolbarContainer?: HTMLElement | null
 }
 
 function RichTextEditor({
@@ -31,11 +40,14 @@ function RichTextEditor({
   showToolbar = true,
   onSave,
   onOpenReference,
-  onSaveStatusChange
+  onSaveStatusChange,
+  onWordCountChange,
+  toolbarContainer
 }: RichTextEditorProps) {
   const charactersRef = useRef(characters)
   const locationsRef = useRef(locations)
   const openReferenceRef = useRef(onOpenReference)
+  const wordCountChangeRef = useRef(onWordCountChange)
 
   useEffect(() => {
     charactersRef.current = characters
@@ -49,6 +61,10 @@ function RichTextEditor({
     openReferenceRef.current = onOpenReference
   }, [onOpenReference])
 
+  useEffect(() => {
+    wordCountChangeRef.current = onWordCountChange
+  }, [onWordCountChange])
+
   const { status, scheduleSave } = useDebouncedSave(onSave, 500)
 
   useEffect(() => {
@@ -57,7 +73,45 @@ function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        code: false,
+        codeBlock: false,
+        link: false
+      }),
+
+      TextStyle,
+      Color,
+      FontFamily,
+      FontSize,
+      TextAlign.configure({ types: ['heading', 'paragraph'], defaultAlignment: 'left' }),
+
+      Placeholder.configure({ placeholder }),
+
+      CharacterCount,
+
+      Typography.configure({
+        copyright: false,
+        trademark: false,
+        servicemark: false,
+        registeredTrademark: false,
+        plusMinus: false,
+        notEqual: false,
+        multiplication: false,
+        laquo: false,
+        raquo: false,
+        leftArrow: false,
+        rightArrow: false,
+        superscriptTwo: false,
+        superscriptThree: false,
+        oneHalf: false,
+        oneQuarter: false,
+        threeQuarters: false
+      }),
+
+      DialogueDash,
+
+      Highlight,
+
       // eslint-disable-next-line react-hooks/refs
       createReferenceMention({
         getCharacters: () => charactersRef.current,
@@ -71,7 +125,7 @@ function RichTextEditor({
       attributes: {
         class: `editor-document ${className}`.trim(),
         spellcheck: 'true',
-        'data-placeholder': placeholder
+        lang: 'pt-BR'
       },
 
       handleClickOn(_view, _position, node) {
@@ -91,14 +145,23 @@ function RichTextEditor({
       }
     },
 
+    onCreate({ editor: currentEditor }) {
+      wordCountChangeRef.current?.(currentEditor.storage.characterCount.words())
+    },
+
     onUpdate({ editor: currentEditor }) {
+      wordCountChangeRef.current?.(currentEditor.storage.characterCount.words())
       scheduleSave(currentEditor.getHTML())
     }
   })
 
+  const toolbar = showToolbar ? <EditorToolbar editor={editor} /> : null
+
   return (
     <>
-      {showToolbar && <EditorToolbar editor={editor} />}
+      {toolbarContainer === undefined
+        ? toolbar
+        : toolbarContainer && toolbar && createPortal(toolbar, toolbarContainer)}
 
       <div className="rich-text-editor">
         <EditorContent editor={editor} />

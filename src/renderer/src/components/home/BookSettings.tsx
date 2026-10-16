@@ -133,6 +133,10 @@ function BookSettings({ book, onUpdate, onBack }: BookSettingsProps) {
             placeholder="Escreva uma breve sinopse do livro..."
           />
         </label>
+
+        <button type="button" className="primary-button" onClick={onBack}>
+          Salvar
+        </button>
       </div>
     </div>
   )
