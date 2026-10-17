@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import { registerBackupHandlers } from './backup'
+import { setupAppMenu } from './menu'
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,6 +53,8 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
 
   registerBackupHandlers()
+
+  setupAppMenu()
 
   createWindow()
 

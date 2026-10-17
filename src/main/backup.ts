@@ -4,11 +4,25 @@ import { basename, join } from 'path'
 
 const BACKUP_FILTERS = [{ name: 'Backup do livro (JSON)', extensions: ['json'] }]
 const MAX_IMPORT_SIZE = 50 * 1024 * 1024
-const AUTO_BACKUP_PATTERN = /^backup-\d{4}-\d{2}-\d{2}\.json$/
+
+const AUTO_BACKUP_PATTERN = /^backup-(\d{4}-\d{2}-\d{2})-([\w-]+)\.json$/
 const AUTO_BACKUP_KEEP = 14
+const BOOK_ID_PATTERN = /^[\w-]{1,100}$/
 
 function getAutoBackupFolder(): string {
   return join(app.getPath('userData'), 'backups')
+}
+
+export async function openAutoBackupFolder(): Promise<void> {
+  const folder = getAutoBackupFolder()
+
+  await mkdir(folder, { recursive: true })
+
+  const error = await shell.openPath(folder)
+
+  if (error) {
+    throw new Error(error)
+  }
 }
 
 async function writeFileSafely(filePath: string, content: string): Promise<void> {
@@ -79,33 +93,32 @@ export function registerBackupHandlers(): void {
     return { path: filePath, content: await readFile(filePath, 'utf-8') }
   })
 
-  // auto Backup
-  ipcMain.handle('backup:auto', async (_event, content: unknown) => {
-    if (typeof content !== 'string') {
+  ipcMain.handle('backup:auto', async (_event, content: unknown, bookId: unknown) => {
+    if (
+      typeof content !== 'string' ||
+      typeof bookId !== 'string' ||
+      !BOOK_ID_PATTERN.test(bookId)
+    ) {
       throw new Error('Dados de backup inválidos.')
     }
 
     const folder = getAutoBackupFolder()
     await mkdir(folder, { recursive: true })
 
-    // Date AAAA-MM-DD.
+    // Date format AAAA-MM-DD.
     const day = new Date().toLocaleDateString('sv-SE')
-    const filePath = join(folder, `backup-${day}.json`)
+    const filePath = join(folder, `backup-${day}-${bookId}.json`)
 
     await writeFileSafely(filePath, content)
 
-    const files = (await readdir(folder)).filter((name) => AUTO_BACKUP_PATTERN.test(name)).sort()
-    const expired = files.slice(0, Math.max(0, files.length - AUTO_BACKUP_KEEP))
+    const bookFiles = (await readdir(folder))
+      .filter((name) => AUTO_BACKUP_PATTERN.exec(name)?.[2] === bookId)
+      .sort()
+
+    const expired = bookFiles.slice(0, Math.max(0, bookFiles.length - AUTO_BACKUP_KEEP))
 
     await Promise.all(expired.map((name) => rm(join(folder, name), { force: true })))
 
     return { path: filePath }
-  })
-
-  ipcMain.handle('backup:open-folder', async () => {
-    const folder = getAutoBackupFolder()
-
-    await mkdir(folder, { recursive: true })
-    await shell.openPath(folder)
   })
 }

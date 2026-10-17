@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
@@ -12,10 +12,18 @@ const api = {
   openBackup: (): Promise<{ path: string; content: string } | null> =>
     ipcRenderer.invoke('backup:open'),
 
-  saveAutoBackup: (content: string): Promise<{ path: string }> =>
-    ipcRenderer.invoke('backup:auto', content),
+  saveAutoBackup: (content: string, bookId: string): Promise<{ path: string }> =>
+    ipcRenderer.invoke('backup:auto', content, bookId),
 
-  openBackupsFolder: (): Promise<void> => ipcRenderer.invoke('backup:open-folder')
+  onMenuAction: (callback: (action: string) => void): (() => void) => {
+    const listener = (_event: IpcRendererEvent, action: string): void => callback(action)
+
+    ipcRenderer.on('menu:action', listener)
+
+    return () => {
+      ipcRenderer.removeListener('menu:action', listener)
+    }
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

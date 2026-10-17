@@ -7,7 +7,6 @@ import { useState } from 'react'
 
 import { getWordCount } from '@renderer/utils/textStats'
 import PageHeader from '../search/PageHeader'
-import BackupPanel from './BackupPanel'
 
 type HomePageProps = {
   book: BookRecord
@@ -42,8 +41,6 @@ function HomePage({
               onUpdate={onUpdateBook}
               onBack={() => setSettingsOpen(false)}
             />
-
-            <BackupPanel book={book} />
           </div>
         </div>
       </main>

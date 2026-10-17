@@ -5,6 +5,7 @@ import ChapterList from './ChapterList'
 import CharacterList from './CharacterList'
 import LocationList from './LocationList'
 import SidebarSection from './SidebarSection'
+import BookSwitcher from '../library/BookSwitcher'
 
 type SidebarProps = {
   bookTitle: string
@@ -37,15 +38,12 @@ type SidebarProps = {
 }
 
 function Sidebar({
-  bookTitle,
   chapters,
   characters,
   locations,
   activeChapterId,
   activeCharacterId,
   activeLocationId,
-  homeActive,
-  onSelectHome,
   onSelectChapter,
   onSelectCharacter,
   onSelectLocation,
@@ -65,13 +63,7 @@ function Sidebar({
         <h1>Book Writer</h1>
       </div>
 
-      <button
-        type="button"
-        className={`project-name ${homeActive ? 'active' : ''}`}
-        onClick={onSelectHome}
-      >
-        <span>{bookTitle}</span>
-      </button>
+      <BookSwitcher />
 
       <SidebarSection title="Capítulos" createTitle="Criar capítulo" onCreate={onCreateChapter}>
         <ChapterList

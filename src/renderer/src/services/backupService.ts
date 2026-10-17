@@ -11,7 +11,6 @@ import type {
 import { getWordCount } from '../utils/textStats'
 
 export const BACKUP_APP = 'ink-pocket'
-
 export const BACKUP_FORMAT_VERSION = 1
 
 export type BackupFile = {
@@ -348,5 +347,5 @@ export async function runAutoBackup(bookId: string): Promise<void> {
     return
   }
 
-  await window.api.saveAutoBackup(JSON.stringify(backup))
+  await window.api.saveAutoBackup(JSON.stringify(backup), backup.book.id)
 }
