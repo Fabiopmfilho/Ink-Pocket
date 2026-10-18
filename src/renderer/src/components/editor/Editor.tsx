@@ -61,36 +61,38 @@ function Editor({
 
       <div className="editor-toolbar-slot" ref={setToolbarSlot} />
 
-      <div className="editor">
-        <input
-          className="chapter-title"
-          value={title}
-          onChange={(event) => {
-            const nextTitle = event.target.value
+      <div className="editor editor-paper-view">
+        <div className="editor-page">
+          <input
+            className="chapter-title"
+            value={title}
+            onChange={(event) => {
+              const nextTitle = event.target.value
 
-            setTitle(nextTitle)
-            scheduleTitleSave(nextTitle)
-          }}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.currentTarget.blur()
-            }
-          }}
-          placeholder={chapter.type === 'scene' ? 'Título da cena' : 'Título do capítulo'}
-        />
+              setTitle(nextTitle)
+              scheduleTitleSave(nextTitle)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.currentTarget.blur()
+              }
+            }}
+            placeholder={chapter.type === 'scene' ? 'Título da cena' : 'Título do capítulo'}
+          />
 
-        <RichTextEditor
-          content={chapter.content}
-          characters={characters}
-          locations={locations}
-          className="manuscript-document"
-          placeholder="Comece a escrever..."
-          showToolbar
-          onSave={(content) => onUpdate('content', content)}
-          onOpenReference={onOpenReference}
-          onSaveStatusChange={setContentSaveStatus}
-          toolbarContainer={toolbarSlot}
-        />
+          <RichTextEditor
+            content={chapter.content}
+            characters={characters}
+            locations={locations}
+            className="manuscript-document"
+            placeholder="Comece a escrever..."
+            showToolbar
+            onSave={(content) => onUpdate('content', content)}
+            onOpenReference={onOpenReference}
+            onSaveStatusChange={setContentSaveStatus}
+            toolbarContainer={toolbarSlot}
+          />
+        </div>
       </div>
 
       <footer className="editor-footer">
