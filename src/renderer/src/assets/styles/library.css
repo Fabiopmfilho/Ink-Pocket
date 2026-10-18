@@ -1,12 +1,11 @@
 /* SELETOR DE LIVROS */
 
-/* Herda a fonte do elemento onde for colocado, para parecer o título que já existia. */
 .book-switcher-trigger {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   max-width: 100%;
-  padding: 0;
+  padding-left: 20px;
   border: 0;
   background: transparent;
   color: inherit;
@@ -53,6 +52,7 @@
 
 .book-switcher-item {
   display: flex;
+  position: relative;
   align-items: center;
   gap: 8px;
   width: 100%;
@@ -84,6 +84,7 @@
 }
 
 .book-switcher-item-title {
+  white-space: nowrap;
   flex: 1;
   min-width: 0;
   overflow: hidden;

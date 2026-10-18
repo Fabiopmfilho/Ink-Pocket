@@ -1,4 +1,11 @@
-import { app, BrowserWindow, dialog, Menu, type MenuItemConstructorOptions } from 'electron'
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  Menu,
+  type MenuItemConstructorOptions
+} from 'electron'
 
 import { openAutoBackupFolder } from './backup'
 
@@ -10,7 +17,7 @@ function sendToRenderer(action: MenuAction): void {
   window?.webContents.send('menu:action', action)
 }
 
-export function setupAppMenu(): void {
+function buildTemplate(): MenuItemConstructorOptions[] {
   const isMac = process.platform === 'darwin'
 
   const macAppMenu: MenuItemConstructorOptions[] = isMac
@@ -38,7 +45,7 @@ export function setupAppMenu(): void {
         { type: 'separator' }
       ]
 
-  const template: MenuItemConstructorOptions[] = [
+  return [
     ...macAppMenu,
     {
       label: 'Arquivo',
@@ -95,6 +102,27 @@ export function setupAppMenu(): void {
       ]
     }
   ]
+}
+
+export function setupAppMenu(): void {
+  const template = buildTemplate()
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+
+  ipcMain.handle('menu:labels', () => template.map((entry) => entry.label ?? ''))
+
+  ipcMain.handle('menu:popup', (event, index: unknown, x: unknown, y: unknown) => {
+    if (typeof index !== 'number' || typeof x !== 'number' || typeof y !== 'number') {
+      return
+    }
+
+    const submenu = template[index]?.submenu
+    const window = BrowserWindow.fromWebContents(event.sender)
+
+    if (!Array.isArray(submenu) || !window) {
+      return
+    }
+
+    Menu.buildFromTemplate(submenu).popup({ window, x: Math.round(x), y: Math.round(y) })
+  })
 }

@@ -11,6 +11,7 @@ import ChapterOverview from './components/manuscript/ChapterOverview'
 import Notice from './components/notice/Notice'
 import Sidebar from './components/sidebar/Sidebar'
 import QuickSearch from './components/search/QuickSearch'
+import TitleBar from './components/titlebar/TitleBar'
 
 import { SearchTriggerContext } from './components/search/searchTriggerContext'
 import { BookLibraryContext } from './components/library/BookLibraryContext'
@@ -369,255 +370,259 @@ function App() {
   return (
     <SearchTriggerContext.Provider value={searchTrigger}>
       <BookLibraryContext.Provider value={bookLibrary}>
-        <div className={appClassName}>
-          <QuickSearch
-            open={quickSearchOpen}
-            documents={documents}
-            characters={characters}
-            locations={locations}
-            onClose={() => setQuickSearchOpen(false)}
-            onSelect={(result) => {
-              setQuickSearchOpen(false)
+        <div className="app-shell">
+          <TitleBar />
 
-              if (result.type === 'document') {
+          <div className={appClassName}>
+            <QuickSearch
+              open={quickSearchOpen}
+              documents={documents}
+              characters={characters}
+              locations={locations}
+              onClose={() => setQuickSearchOpen(false)}
+              onSelect={(result) => {
+                setQuickSearchOpen(false)
+
+                if (result.type === 'document') {
+                  setSelection({
+                    type: 'document',
+                    id: result.id
+                  })
+                  return
+                }
+
+                if (result.type === 'character') {
+                  setSelection({
+                    type: 'character',
+                    id: result.id
+                  })
+                  return
+                }
+
+                setSelection({
+                  type: 'location',
+                  id: result.id
+                })
+              }}
+            />
+            <button
+              type="button"
+              className="panel-toggle sidebar-panel-toggle"
+              onClick={() => setSidebarVisible((visible) => !visible)}
+              title={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
+              aria-label={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
+            >
+              {sidebarVisible ? '‹‹' : '››'}
+            </button>
+            <button
+              type="button"
+              className="panel-toggle inspector-panel-toggle"
+              onClick={() => setInspectorVisible((visible) => !visible)}
+              title={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
+              aria-label={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
+            >
+              {inspectorVisible ? '››' : '‹‹'}
+            </button>
+            <Sidebar
+              homeActive={selection.type === 'home'}
+              onSelectHome={() => setSelection({ type: 'home' })}
+              bookTitle={book.title}
+              chapters={documents}
+              characters={characters}
+              locations={locations}
+              activeChapterId={selection.type === 'document' ? selection.id : null}
+              activeCharacterId={selection.type === 'character' ? selection.id : null}
+              activeLocationId={selection.type === 'location' ? selection.id : null}
+              onSelectChapter={(id) =>
                 setSelection({
                   type: 'document',
-                  id: result.id
+                  id
                 })
-                return
               }
-
-              if (result.type === 'character') {
+              onSelectCharacter={(id) =>
                 setSelection({
                   type: 'character',
-                  id: result.id
+                  id
                 })
-                return
               }
+              onSelectLocation={(id) =>
+                setSelection({
+                  type: 'location',
+                  id
+                })
+              }
+              onCreateChapter={() => void createChapter()}
+              onCreateScene={(chapterId) => void createScene(chapterId)}
+              onDeleteDocument={(documentId) => void deleteDocument(documentId)}
+              onCreateCharacter={() => void createCharacter()}
+              onCreateLocation={() => void createLocation()}
+              onReorderDocuments={(documentIds) => void reorderDocuments(documentIds)}
+              onMoveScene={(sceneId, targetChapterId) => void moveScene(sceneId, targetChapterId)}
+              onDeleteCharacter={(characterId) => void deleteCharacter(characterId)}
+              onDeleteLocation={(locationId) => void deleteLocation(locationId)}
+            />
+            {selection.type === 'home' && (
+              <>
+                <HomePage
+                  book={book}
+                  documents={documents}
+                  onOpenChapter={(id) =>
+                    setSelection({
+                      type: 'document',
+                      id
+                    })
+                  }
+                  onCreateChapter={() => void createChapter()}
+                  onUpdateBook={(field, value) => void updateBook(field, value)}
+                />
 
-              setSelection({
-                type: 'location',
-                id: result.id
-              })
-            }}
-          />
-          <button
-            type="button"
-            className="panel-toggle sidebar-panel-toggle"
-            onClick={() => setSidebarVisible((visible) => !visible)}
-            title={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
-            aria-label={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
-          >
-            {sidebarVisible ? '‹‹' : '››'}
-          </button>
-          <button
-            type="button"
-            className="panel-toggle inspector-panel-toggle"
-            onClick={() => setInspectorVisible((visible) => !visible)}
-            title={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
-            aria-label={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
-          >
-            {inspectorVisible ? '››' : '‹‹'}
-          </button>
-          <Sidebar
-            homeActive={selection.type === 'home'}
-            onSelectHome={() => setSelection({ type: 'home' })}
-            bookTitle={book.title}
-            chapters={documents}
-            characters={characters}
-            locations={locations}
-            activeChapterId={selection.type === 'document' ? selection.id : null}
-            activeCharacterId={selection.type === 'character' ? selection.id : null}
-            activeLocationId={selection.type === 'location' ? selection.id : null}
-            onSelectChapter={(id) =>
-              setSelection({
-                type: 'document',
-                id
-              })
-            }
-            onSelectCharacter={(id) =>
-              setSelection({
-                type: 'character',
-                id
-              })
-            }
-            onSelectLocation={(id) =>
-              setSelection({
-                type: 'location',
-                id
-              })
-            }
-            onCreateChapter={() => void createChapter()}
-            onCreateScene={(chapterId) => void createScene(chapterId)}
-            onDeleteDocument={(documentId) => void deleteDocument(documentId)}
-            onCreateCharacter={() => void createCharacter()}
-            onCreateLocation={() => void createLocation()}
-            onReorderDocuments={(documentIds) => void reorderDocuments(documentIds)}
-            onMoveScene={(sceneId, targetChapterId) => void moveScene(sceneId, targetChapterId)}
-            onDeleteCharacter={(characterId) => void deleteCharacter(characterId)}
-            onDeleteLocation={(locationId) => void deleteLocation(locationId)}
-          />
-          {selection.type === 'home' && (
-            <>
-              <HomePage
-                book={book}
-                documents={documents}
-                onOpenChapter={(id) =>
-                  setSelection({
-                    type: 'document',
-                    id
-                  })
-                }
-                onCreateChapter={() => void createChapter()}
-                onUpdateBook={(field, value) => void updateBook(field, value)}
-              />
+                <aside className="inspector">
+                  <div className="inspector-header">
+                    <h2>Projeto</h2>
+                  </div>
 
-              <aside className="inspector">
-                <div className="inspector-header">
-                  <h2>Projeto</h2>
-                </div>
+                  <div className="inspector-section">
+                    <label>Capítulos</label>
 
-                <div className="inspector-section">
-                  <label>Capítulos</label>
+                    <strong>
+                      {
+                        documents.filter(
+                          (document) => document.type === 'chapter' && document.parentId === null
+                        ).length
+                      }
+                    </strong>
+                  </div>
 
-                  <strong>
-                    {
-                      documents.filter(
-                        (document) => document.type === 'chapter' && document.parentId === null
-                      ).length
-                    }
-                  </strong>
-                </div>
+                  <div className="inspector-section">
+                    <label>Cenas</label>
 
-                <div className="inspector-section">
-                  <label>Cenas</label>
+                    <strong>
+                      {documents.filter((document) => document.type === 'scene').length}
+                    </strong>
+                  </div>
 
-                  <strong>
-                    {documents.filter((document) => document.type === 'scene').length}
-                  </strong>
-                </div>
+                  <div className="inspector-section">
+                    <label>Personagens</label>
+                    <strong>{characters.length}</strong>
+                  </div>
 
-                <div className="inspector-section">
-                  <label>Personagens</label>
-                  <strong>{characters.length}</strong>
-                </div>
+                  <div className="inspector-section">
+                    <label>Lugares</label>
+                    <strong>{locations.length}</strong>
+                  </div>
+                </aside>
+              </>
+            )}
+            {activeChapter && (
+              <>
+                <ChapterOverview
+                  chapter={activeChapter}
+                  scenes={activeChapterScenes}
+                  onOpenScene={(sceneId) =>
+                    setSelection({
+                      type: 'document',
+                      id: sceneId
+                    })
+                  }
+                  onCreateScene={() => void createScene(activeChapter.id)}
+                  onDeleteScene={(sceneId) => void deleteDocument(sceneId)}
+                  onReorderScenes={(sceneIds) => void reorderDocuments(sceneIds)}
+                />
 
-                <div className="inspector-section">
-                  <label>Lugares</label>
-                  <strong>{locations.length}</strong>
-                </div>
-              </aside>
-            </>
-          )}
-          {activeChapter && (
-            <>
-              <ChapterOverview
-                chapter={activeChapter}
-                scenes={activeChapterScenes}
-                onOpenScene={(sceneId) =>
-                  setSelection({
-                    type: 'document',
-                    id: sceneId
-                  })
-                }
-                onCreateScene={() => void createScene(activeChapter.id)}
-                onDeleteScene={(sceneId) => void deleteDocument(sceneId)}
-                onReorderScenes={(sceneIds) => void reorderDocuments(sceneIds)}
-              />
+                <Inspector
+                  chapter={activeChapter}
+                  wordCount={chapterWordCount}
+                  characterCount={chapterCharacterCount}
+                  onUpdateNotes={(notes) => void updateDocument('notes', notes)}
+                />
+              </>
+            )}
+            {activeScene && (
+              <>
+                <Editor
+                  key={activeScene.id}
+                  chapter={activeScene}
+                  characters={characters}
+                  locations={locations}
+                  wordCount={sceneWordCount}
+                  onUpdate={(field, value) => updateDocument(field, value)}
+                  onOpenReference={openReference}
+                />
 
-              <Inspector
-                chapter={activeChapter}
-                wordCount={chapterWordCount}
-                characterCount={chapterCharacterCount}
-                onUpdateNotes={(notes) => void updateDocument('notes', notes)}
-              />
-            </>
-          )}
-          {activeScene && (
-            <>
-              <Editor
-                key={activeScene.id}
-                chapter={activeScene}
-                characters={characters}
-                locations={locations}
-                wordCount={sceneWordCount}
-                onUpdate={(field, value) => updateDocument(field, value)}
-                onOpenReference={openReference}
-              />
+                <Inspector
+                  chapter={activeScene}
+                  wordCount={sceneWordCount}
+                  characterCount={sceneCharacterCount}
+                  onUpdateNotes={(notes) => void updateDocument('notes', notes)}
+                />
+              </>
+            )}
+            {activeCharacter && (
+              <>
+                <CharacterEditor
+                  key={activeCharacter.id}
+                  character={activeCharacter}
+                  characters={characters}
+                  locations={locations}
+                  documents={documents}
+                  onOpenDocument={(documentId) =>
+                    setSelection({
+                      type: 'document',
+                      id: documentId
+                    })
+                  }
+                  onUpdate={(field, value) => updateCharacter(field, value)}
+                  onCommitName={() => commitCharacterName()}
+                  onOpenReference={openReference}
+                />
 
-              <Inspector
-                chapter={activeScene}
-                wordCount={sceneWordCount}
-                characterCount={sceneCharacterCount}
-                onUpdateNotes={(notes) => void updateDocument('notes', notes)}
-              />
-            </>
-          )}
-          {activeCharacter && (
-            <>
-              <CharacterEditor
-                key={activeCharacter.id}
-                character={activeCharacter}
-                characters={characters}
-                locations={locations}
-                documents={documents}
-                onOpenDocument={(documentId) =>
-                  setSelection({
-                    type: 'document',
-                    id: documentId
-                  })
-                }
-                onUpdate={(field, value) => updateCharacter(field, value)}
-                onCommitName={() => commitCharacterName()}
-                onOpenReference={openReference}
-              />
+                <aside className="inspector">
+                  <div className="inspector-header">
+                    <h2>Referências</h2>
+                  </div>
 
-              <aside className="inspector">
-                <div className="inspector-header">
-                  <h2>Referências</h2>
-                </div>
+                  <div className="inspector-section">
+                    <label>Como mencionar</label>
 
-                <div className="inspector-section">
-                  <label>Como mencionar</label>
+                    <strong className="reference-name">@{activeCharacter.name}</strong>
+                  </div>
+                </aside>
+              </>
+            )}
+            {activeLocation && (
+              <>
+                <LocationEditor
+                  key={activeLocation.id}
+                  location={activeLocation}
+                  documents={documents}
+                  characters={characters}
+                  locations={locations}
+                  onUpdate={(field, value) => updateLocation(field, value)}
+                  onCommitName={() => commitLocationName()}
+                  onOpenDocument={(documentId) =>
+                    setSelection({
+                      type: 'document',
+                      id: documentId
+                    })
+                  }
+                  onOpenReference={openReference}
+                />
 
-                  <strong className="reference-name">@{activeCharacter.name}</strong>
-                </div>
-              </aside>
-            </>
-          )}
-          {activeLocation && (
-            <>
-              <LocationEditor
-                key={activeLocation.id}
-                location={activeLocation}
-                documents={documents}
-                characters={characters}
-                locations={locations}
-                onUpdate={(field, value) => updateLocation(field, value)}
-                onCommitName={() => commitLocationName()}
-                onOpenDocument={(documentId) =>
-                  setSelection({
-                    type: 'document',
-                    id: documentId
-                  })
-                }
-                onOpenReference={openReference}
-              />
+                <aside className="inspector">
+                  <div className="inspector-header">
+                    <h2>Referências</h2>
+                  </div>
 
-              <aside className="inspector">
-                <div className="inspector-header">
-                  <h2>Referências</h2>
-                </div>
+                  <div className="inspector-section">
+                    <label>Como mencionar</label>
 
-                <div className="inspector-section">
-                  <label>Como mencionar</label>
-
-                  <strong className="reference-name">#{activeLocation.name}</strong>
-                </div>
-              </aside>
-            </>
-          )}
-          <Notice notice={notice} onDismiss={dismissNotice} />
+                    <strong className="reference-name">#{activeLocation.name}</strong>
+                  </div>
+                </aside>
+              </>
+            )}
+            <Notice notice={notice} onDismiss={dismissNotice} />
+          </div>
         </div>
       </BookLibraryContext.Provider>
     </SearchTriggerContext.Provider>

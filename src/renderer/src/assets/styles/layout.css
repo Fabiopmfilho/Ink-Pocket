@@ -36,7 +36,7 @@
 
 .panel-toggle {
   position: fixed;
-  top: 12px;
+  top: 44px;
   z-index: 100;
   display: grid;
   width: 30px;

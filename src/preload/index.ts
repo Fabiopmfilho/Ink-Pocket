@@ -3,6 +3,8 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
+  platform: process.platform,
+
   saveBackup: (
     content: string,
     suggestedName: string
@@ -23,7 +25,12 @@ const api = {
     return () => {
       ipcRenderer.removeListener('menu:action', listener)
     }
-  }
+  },
+
+  getMenuLabels: (): Promise<string[]> => ipcRenderer.invoke('menu:labels'),
+
+  popupMenu: (index: number, x: number, y: number): Promise<void> =>
+    ipcRenderer.invoke('menu:popup', index, x, y)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

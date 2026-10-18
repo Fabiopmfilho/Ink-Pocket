@@ -4,18 +4,31 @@ import icon from '../../resources/icon.png?asset'
 import { registerBackupHandlers } from './backup'
 import { setupAppMenu } from './menu'
 
+const useCustomTitleBar = process.platform !== 'darwin'
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
+    autoHideMenuBar: true,
+    ...(useCustomTitleBar
+      ? {
+          titleBarStyle: 'hidden' as const,
+          titleBarOverlay: { color: '#202020', symbolColor: '#d4d4d4', height: 32 }
+        }
+      : {}),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
+  if (useCustomTitleBar) {
+    mainWindow.setMenuBarVisibility(false)
+  }
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

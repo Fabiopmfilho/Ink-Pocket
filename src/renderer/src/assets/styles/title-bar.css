@@ -1,0 +1,175 @@
+/* (Windows and Linux) */
+:root {
+  --title-bar-height: 32px;
+  --title-bar-background: #202020;
+}
+
+#root:has(> .app-shell) {
+  width: 100%;
+  height: 100%;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-shell > .app {
+  flex: 1 1 0;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.app-shell > .title-bar {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(180px, 480px) minmax(150px, 1fr);
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--title-bar-height);
+  margin: 0;
+  padding: 0;
+  background: var(--title-bar-background);
+  color: #d4d4d4;
+  font-size: 13px;
+  line-height: 1;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+/* ---------- Menus ---------- */
+
+.title-bar .title-bar-menu {
+  display: flex;
+  align-items: center;
+  grid-column: 1;
+  justify-self: start;
+  gap: 2px;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.title-bar .title-bar-menu button {
+  appearance: none;
+  box-sizing: border-box;
+  height: 26px;
+  min-width: 0;
+  margin: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  line-height: 26px;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: default;
+}
+
+.title-bar .title-bar-menu button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+.title-bar .title-bar-menu button:focus-visible {
+  outline: 1px solid #8d82ae;
+  outline-offset: -1px;
+}
+
+/* ---------- Busca centralizada ---------- */
+
+.title-bar .title-bar-search {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  grid-column: 2;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 24px;
+  min-width: 0;
+  margin: 0;
+  padding: 0 8px 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.07);
+  color: #b5b5b5;
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.title-bar .title-bar-search:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e0e0e0;
+}
+
+.title-bar .title-bar-search:focus-visible {
+  outline: 1px solid #8d82ae;
+  outline-offset: 1px;
+}
+
+.title-bar .title-bar-search svg {
+  flex: none;
+}
+
+.title-bar .title-bar-search-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-bar .title-bar-search-shortcut {
+  flex: none;
+  padding: 0 5px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 11px;
+  line-height: 16px;
+  opacity: 0.8;
+}
+
+.title-bar .title-bar-start {
+  display: flex;
+  align-items: center;
+  grid-column: 1;
+  justify-self: start;
+  height: 100%;
+  min-width: 0;
+}
+
+.title-bar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.title-bar-icon img {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
