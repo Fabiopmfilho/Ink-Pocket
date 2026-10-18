@@ -19,7 +19,7 @@ function CharacterList({
     <EntityList
       items={characters}
       activeItemId={activeCharacterId}
-      icon={<User size={16} strokeWidth={1.75} aria-hidden="true" />}
+      icon={<User size={14} strokeWidth={1.75} aria-hidden="true" />}
       emptyMessage="Nenhum personagem"
       fallbackName="Personagem sem nome"
       deleteTitle="Excluir personagem"

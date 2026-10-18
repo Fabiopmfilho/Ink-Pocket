@@ -19,7 +19,7 @@ function LocationList({
     <EntityList
       items={locations}
       activeItemId={activeLocationId}
-      icon={<MapPin size={16} strokeWidth={1.75} aria-hidden="true" />}
+      icon={<MapPin size={14} strokeWidth={1.75} aria-hidden="true" />}
       emptyMessage="Nenhum lugar"
       fallbackName="Lugar sem nome"
       deleteTitle="Excluir lugar"
