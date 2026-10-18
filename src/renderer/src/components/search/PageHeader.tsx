@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { ChevronLeft, Search } from 'lucide-react'
 
-import { HomeNavigationContext } from './Homenavigationcontext'
+import { HomeNavigationContext } from './HomeNavigationContext'
 import { SearchTriggerContext } from './searchTriggerContext'
 
 type PageHeaderProps = {

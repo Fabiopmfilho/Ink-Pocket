@@ -15,7 +15,7 @@ import TitleBar from './components/titlebar/TitleBar'
 
 import { SearchTriggerContext } from './components/search/searchTriggerContext'
 import { BookLibraryContext } from './components/library/BookLibraryContext'
-import { HomeNavigationContext } from './components/search/Homenavigationcontext'
+import { HomeNavigationContext } from './components/search/HomeNavigationContext'
 
 import type {
   BookEditableField,
