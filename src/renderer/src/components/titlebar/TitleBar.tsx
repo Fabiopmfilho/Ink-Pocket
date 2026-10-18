@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, type MouseEvent } from 'react'
-import appIcon from '../../../../../resources/icon2.png'
+import appIcon from '../../../../../resources/icon.png'
 
 import { Search } from 'lucide-react'
 

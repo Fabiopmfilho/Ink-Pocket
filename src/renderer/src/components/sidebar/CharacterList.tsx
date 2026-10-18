@@ -1,3 +1,4 @@
+import { User } from 'lucide-react'
 import type { CharacterRecord } from '../../database/models'
 import EntityList from './EntityList'
 
@@ -18,7 +19,7 @@ function CharacterList({
     <EntityList
       items={characters}
       activeItemId={activeCharacterId}
-      icon="♙"
+      icon={<User size={16} strokeWidth={1.75} aria-hidden="true" />}
       emptyMessage="Nenhum personagem"
       fallbackName="Personagem sem nome"
       deleteTitle="Excluir personagem"

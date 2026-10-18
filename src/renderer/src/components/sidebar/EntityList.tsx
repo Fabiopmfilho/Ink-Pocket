@@ -1,3 +1,6 @@
+import { Trash } from 'lucide-react'
+import { ReactNode } from 'react'
+
 type EntityListItem = {
   id: string
   name: string
@@ -6,7 +9,7 @@ type EntityListItem = {
 type EntityListProps<T extends EntityListItem> = {
   items: T[]
   activeItemId: string | null
-  icon: string
+  icon: ReactNode
   emptyMessage: string
   fallbackName: string
   deleteTitle: string
@@ -51,7 +54,7 @@ function EntityList<T extends EntityListItem>({
               title={deleteTitle}
               aria-label={`${deleteTitle}: ${name}`}
             >
-              ×
+              <Trash size={16} strokeWidth={1.75} aria-hidden="true" />
             </button>
           </div>
         )

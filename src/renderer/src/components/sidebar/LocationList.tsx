@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react'
 import type { LocationRecord } from '../../database/models'
 import EntityList from './EntityList'
 
@@ -18,7 +19,7 @@ function LocationList({
     <EntityList
       items={locations}
       activeItemId={activeLocationId}
-      icon="⌖"
+      icon={<MapPin size={16} strokeWidth={1.75} aria-hidden="true" />}
       emptyMessage="Nenhum lugar"
       fallbackName="Lugar sem nome"
       deleteTitle="Excluir lugar"

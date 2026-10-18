@@ -3,6 +3,7 @@ import { DragDropProvider } from '@dnd-kit/react'
 import { isSortable, useSortable } from '@dnd-kit/react/sortable'
 
 import type { Chapter } from '../../types/book'
+import { FileText, GripVertical, Plus, Trash } from 'lucide-react'
 
 type ChapterListProps = {
   chapters: Chapter[]
@@ -69,7 +70,7 @@ function SortableScene({
         title="Excluir cena"
         aria-label={`Excluir ${scene.title || fallbackTitle}`}
       >
-        ×
+        <Trash size={16} strokeWidth={1.75} aria-hidden="true" />
       </button>
     </div>
   )
@@ -128,7 +129,7 @@ function SortableChapter({
           title="Arrastar capítulo"
           aria-label={`Reordenar ${chapter.title || fallbackTitle}`}
         >
-          ⠿
+          <GripVertical size={26} />
         </button>
 
         <button
@@ -146,7 +147,9 @@ function SortableChapter({
           className={`chapter document-title ${chapter.id === activeChapterId ? 'active' : ''}`}
           onClick={onSelect}
         >
-          <span>▤</span>
+          <span>
+            <FileText size={12} strokeWidth={1.75} aria-hidden="true" />
+          </span>
           <span>{chapter.title || fallbackTitle}</span>
         </button>
 
@@ -157,7 +160,7 @@ function SortableChapter({
           title="Excluir capítulo"
           aria-label={`Excluir ${chapter.title || fallbackTitle}`}
         >
-          ×
+          <Trash size={16} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         <button
@@ -167,7 +170,7 @@ function SortableChapter({
           title="Nova cena"
           aria-label={`Criar cena em ${chapter.title || fallbackTitle}`}
         >
-          +
+          <Plus size={16} strokeWidth={1.75} aria-hidden="true" />
         </button>
       </div>
 

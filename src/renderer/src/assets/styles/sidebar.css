@@ -9,6 +9,11 @@
   border-right: 1px solid #d5d5d1;
 }
 
+.sidebar svg {
+  display: block;
+  flex: none;
+}
+
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -23,12 +28,15 @@
 }
 
 .sidebar-header button {
+  display: grid;
+  place-items: center;
   width: 28px;
   height: 28px;
+  padding: 0;
   border: 0;
   border-radius: 6px;
   background: #d5d5d1;
-  font-size: 20px;
+  color: inherit;
 }
 
 /* PROJETO */
@@ -70,7 +78,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 4px;
-  padding: 18px 18px 6px;
+  padding: 18px 10px 6px 18px;
   color: #666;
   font-size: 12px;
   font-weight: 700;
@@ -111,6 +119,13 @@
 
 .sidebar-section-add {
   flex: 0 0 24px;
+}
+
+.sidebar-section-header .sidebar-section-add {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 0;
 }
 
 .section-chevron {
@@ -293,6 +308,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.entity-title > span:first-child {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 16px;
 }
 
 .entity-row .document-delete-button {

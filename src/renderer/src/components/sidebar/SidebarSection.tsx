@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp, Plus } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
 type SidebarSectionProps = {
@@ -24,7 +25,13 @@ function SidebarSection({ title, createTitle, children, onCreate }: SidebarSecti
           onClick={() => setOpen((currentOpen) => !currentOpen)}
           aria-expanded={open}
         >
-          <span className="section-chevron">{open ? '▾' : '▸'}</span>
+          <span className="section-chevron">
+            {open ? (
+              <ChevronDown size={16} strokeWidth={1.75} aria-hidden="true" />
+            ) : (
+              <ChevronUp size={16} strokeWidth={1.75} aria-hidden="true" />
+            )}
+          </span>
 
           <span>{title}</span>
         </button>
@@ -36,7 +43,7 @@ function SidebarSection({ title, createTitle, children, onCreate }: SidebarSecti
           title={createTitle}
           aria-label={createTitle}
         >
-          +
+          <Plus size={16} strokeWidth={1.75} aria-hidden="true" />
         </button>
       </div>
 

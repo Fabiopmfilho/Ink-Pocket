@@ -53,7 +53,7 @@ import {
   updateCharacterRecord,
   updateLocationRecord
 } from './services/entityService'
-import { ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen } from 'lucide-react'
 
 type Selection =
   | { type: 'home' }
@@ -417,7 +417,11 @@ function App() {
                 title={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
                 aria-label={sidebarVisible ? 'Ocultar barra lateral' : 'Mostrar barra lateral'}
               >
-                {sidebarVisible ? <ChevronsRight /> : <ChevronsLeft />}
+                {sidebarVisible ? (
+                  <PanelLeftClose size={16} strokeWidth={1.75} aria-hidden="true" />
+                ) : (
+                  <PanelLeftOpen size={16} strokeWidth={1.75} aria-hidden="true" />
+                )}
               </button>
               <button
                 type="button"
@@ -426,7 +430,11 @@ function App() {
                 title={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
                 aria-label={inspectorVisible ? 'Ocultar inspetor' : 'Mostrar inspetor'}
               >
-                {inspectorVisible ? <ChevronsRight /> : <ChevronsLeft />}
+                {inspectorVisible ? (
+                  <PanelRightClose size={16} strokeWidth={1.75} aria-hidden="true" />
+                ) : (
+                  <PanelRightOpen size={16} strokeWidth={1.75} aria-hidden="true" />
+                )}
               </button>
               <Sidebar
                 homeActive={selection.type === 'home'}

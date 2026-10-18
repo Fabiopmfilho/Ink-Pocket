@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/react/sortable'
 
 import type { Chapter } from '../../types/book'
+import { GripVertical, Trash2 } from 'lucide-react'
 
 type SortableSceneCardProps = {
   scene: Chapter
@@ -52,7 +53,7 @@ function SortableSceneCard({ scene, index, chapterId, onOpen, onDelete }: Sortab
             title="Arrastar cena"
             aria-label={`Reordenar ${scene.title || `Cena ${index + 1}`}`}
           >
-            ⠿
+            <GripVertical size={14} />
           </button>
 
           <button
@@ -62,7 +63,7 @@ function SortableSceneCard({ scene, index, chapterId, onOpen, onDelete }: Sortab
             title="Excluir cena"
             aria-label={`Excluir ${scene.title || `Cena ${index + 1}`}`}
           >
-            ×
+            <Trash2 size={14} />
           </button>
         </div>
       </header>
