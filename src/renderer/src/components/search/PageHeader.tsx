@@ -1,21 +1,42 @@
 import { useContext } from 'react'
 
-import { Search } from 'lucide-react'
+import { ChevronLeft, Search } from 'lucide-react'
 
+import { HomeNavigationContext } from './Homenavigationcontext'
 import { SearchTriggerContext } from './searchTriggerContext'
 
 type PageHeaderProps = {
   title: string
+  showHome?: boolean
 }
 
-function PageHeader({ title }: PageHeaderProps) {
+function PageHeader({ title, showHome = true }: PageHeaderProps) {
   const searchTrigger = useContext(SearchTriggerContext)
+  const homeNavigation = useContext(HomeNavigationContext)
+
+  const showSearch = searchTrigger !== null && window.api.platform === 'darwin'
 
   return (
-    <header className="editor-header page-header">
-      <span className="editor-header-title">{title}</span>
+    <header className={showSearch ? 'editor-header page-header' : 'editor-header'}>
+      <div className="editor-header-heading">
+        {showHome && homeNavigation && (
+          <button
+            type="button"
+            className="editor-header-home"
+            onClick={homeNavigation.onGoHome}
+            title="Voltar à visão geral"
+            aria-label="Voltar à visão geral"
+          >
+            <ChevronLeft size={15} strokeWidth={1.75} aria-hidden="true" />
 
-      {searchTrigger && (
+            <span>Visão geral</span>
+          </button>
+        )}
+
+        <span className="editor-header-title">{title}</span>
+      </div>
+
+      {showSearch && (
         <button
           type="button"
           className="header-search-trigger"

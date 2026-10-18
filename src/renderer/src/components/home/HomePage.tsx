@@ -32,7 +32,7 @@ function HomePage({
   if (settingsOpen) {
     return (
       <main className="home-area">
-        <PageHeader title="Configurações do projeto" />
+        <PageHeader title="Configurações do projeto" showHome={false} />
 
         <div className="home-content">
           <div className="home-content">
@@ -49,7 +49,7 @@ function HomePage({
 
   return (
     <main className="home-area">
-      <PageHeader title="Visão geral" />
+      <PageHeader title="Visão geral" showHome={false} />
 
       <div className="home-content">
         <div className="home-heading">

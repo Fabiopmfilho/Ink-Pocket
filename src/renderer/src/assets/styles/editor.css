@@ -590,6 +590,52 @@
   line-height: 1.5;
 }
 
+.editor-header-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.editor-header-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-header .editor-header-home {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding: 0 10px 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.editor-header .editor-header-home:hover {
+  background: #f0f0ed;
+  color: #292929;
+}
+
+.editor-header .editor-header-home:focus-visible {
+  outline: 2px solid #55458a;
+  outline-offset: 1px;
+}
+
+.editor-header .editor-header-home + .editor-header-title {
+  padding-left: 12px;
+  border-left: 1px solid #dedede;
+  line-height: 18px;
+}
+
 @media (max-width: 900px) {
   .entity-form-grid {
     grid-template-columns: 1fr;
