@@ -22,6 +22,39 @@
   margin-bottom: 36px;
 }
 
+.chapter-overview-heading > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter-overview-heading h1 input {
+  box-sizing: border-box;
+  width: calc(100% + 12px);
+  margin: 0 -6px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-overflow: ellipsis;
+}
+
+.chapter-overview-heading h1 input::placeholder {
+  color: #aaa;
+}
+
+.chapter-overview-heading h1 input:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.chapter-overview-heading h1 input:focus {
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(85, 69, 138, 0.15);
+}
+
 .chapter-overview-label {
   color: #777;
   font-size: 11px;

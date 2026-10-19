@@ -7,10 +7,7 @@ A desktop application for writing and organizing books, inspired by tools such a
 > **Status:** in active development. Not yet a release-ready product.
 > The interface is currently in Brazilian Portuguese.
 
-<!--
-Add a screenshot here once you have one, for example:
-![Ink Pocket](docs/screenshot.png)
--->
+![Ink Pocket](./src/renderer/src/assets/github/Captura%20de%20tela%202026-10-18%20230400.png)
 
 ## Highlights
 

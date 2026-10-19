@@ -529,8 +529,10 @@ function App() {
               {activeChapter && (
                 <>
                   <ChapterOverview
+                    key={activeChapter.id}
                     chapter={activeChapter}
                     scenes={activeChapterScenes}
+                    onUpdateTitle={(title) => updateDocument('title', title)}
                     onOpenScene={(sceneId) =>
                       setSelection({
                         type: 'document',

@@ -6,14 +6,16 @@ import { isSortable } from '@dnd-kit/react/sortable'
 import type { Chapter } from '../../types/book'
 
 import SortableSceneCard from './SortableSceneCard'
-import { getWordCount } from '../../utils/textStats'
 import PageHeader from '../search/PageHeader'
+import { getWordCount } from '../../utils/textStats'
+import { useDebouncedSave } from '../../hooks/useDebouncedSave'
 
 type ChapterView = 'board' | 'compiled'
 
 type ChapterOverviewProps = {
   chapter: Chapter
   scenes: Chapter[]
+  onUpdateTitle: (title: string) => void | Promise<void>
   onOpenScene: (sceneId: string) => void
   onCreateScene: () => void
   onDeleteScene: (sceneId: string) => void
@@ -23,18 +25,25 @@ type ChapterOverviewProps = {
 function ChapterOverview({
   chapter,
   scenes,
+  onUpdateTitle,
   onOpenScene,
   onCreateScene,
   onDeleteScene,
   onReorderScenes
 }: ChapterOverviewProps) {
   const [view, setView] = useState<ChapterView>('board')
+  const [title, setTitle] = useState(chapter.title)
 
   const orderedScenes = [...scenes].sort((first, second) => first.order - second.order)
 
   const totalWords =
     getWordCount(chapter.content) +
     orderedScenes.reduce((total, scene) => total + getWordCount(scene.content), 0)
+
+  const { scheduleSave: scheduleTitleSave } = useDebouncedSave(
+    (nextTitle) => onUpdateTitle(nextTitle),
+    300
+  )
 
   function reorderScenes(initialIndex: number, finalIndex: number) {
     if (initialIndex === finalIndex) return
@@ -51,14 +60,31 @@ function ChapterOverview({
 
   return (
     <main className="chapter-overview">
-      <PageHeader title={chapter.title || 'Capítulo sem título'} />
+      <PageHeader title={title || 'Capítulo sem título'} />
 
       <div className="chapter-overview-content">
         <div className="chapter-overview-heading">
           <div>
             <span className="chapter-overview-label">Capítulo</span>
 
-            <h1>{chapter.title || 'Capítulo sem título'}</h1>
+            <h1>
+              <input
+                value={title}
+                placeholder="Capítulo sem título"
+                aria-label="Título do capítulo"
+                onChange={(event) => {
+                  const nextTitle = event.target.value
+
+                  setTitle(nextTitle)
+                  scheduleTitleSave(nextTitle)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    event.currentTarget.blur()
+                  }
+                }}
+              />
+            </h1>
 
             <p>
               {orderedScenes.length} {orderedScenes.length === 1 ? 'cena' : 'cenas'}
