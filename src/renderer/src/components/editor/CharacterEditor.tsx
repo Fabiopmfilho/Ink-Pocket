@@ -10,7 +10,10 @@ import type {
 
 import EntityEditor from './EntityEditor'
 import EntityReferences from './EntityReferences'
+import CategoryField from './CategoryField'
 import RichTextEditor, { type EditorSaveStatus } from './RichTextEditor'
+
+import { getCategoryOptions } from '@renderer/utils/categories'
 
 type CharacterTab = 'overview' | 'development' | 'notes' | 'references'
 
@@ -52,6 +55,8 @@ function CharacterEditor({
   const [notesStatus, setNotesStatus] = useState<EditorSaveStatus>('saved')
 
   const saveStatus = mergeSaveStatus(descriptionStatus, notesStatus)
+
+  const categoryOptions = getCategoryOptions(characters)
 
   return (
     <EntityEditor
@@ -101,6 +106,15 @@ function CharacterEditor({
 
       <div className="entity-tab-panel" hidden={activeTab !== 'overview'}>
         <div className="entity-form-grid">
+          <CategoryField
+            value={character.category}
+            options={categoryOptions}
+            placeholder="Ex.: Família real, Guilda dos Magos"
+            onChange={(category) => {
+              void onUpdate('category', category)
+            }}
+          />
+
           <label className="entity-form-field">
             <span>Papel na história</span>
 

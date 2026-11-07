@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-import { Check, ChevronDown, Plus } from 'lucide-react'
+import { BookOpen, Check, ChevronDown, Plus } from 'lucide-react'
 
 import { BookLibraryContext, type BookLibraryValue } from './BookLibraryContext'
 
@@ -12,6 +12,7 @@ type MenuPosition = {
 }
 
 function BookSwitcherMenu({ books, activeBookId, onSelectBook, onCreateBook }: BookLibraryValue) {
+  // null = fechado. A lista é desenhada fora da sidebar (portal) para não ser cortada por ela.
   const [position, setPosition] = useState<MenuPosition | null>(null)
 
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -90,6 +91,8 @@ function BookSwitcherMenu({ books, activeBookId, onSelectBook, onCreateBook }: B
         aria-haspopup="menu"
         aria-expanded={open}
       >
+        <BookOpen size={16} strokeWidth={1.75} className="book-switcher-icon" aria-hidden="true" />
+
         <span>{activeBook?.title || 'Livro sem título'}</span>
 
         <ChevronDown size={14} strokeWidth={1.75} aria-hidden="true" />
@@ -147,6 +150,7 @@ function BookSwitcherMenu({ books, activeBookId, onSelectBook, onCreateBook }: B
 function BookSwitcher() {
   const library = useContext(BookLibraryContext)
 
+  // Sem provider (App ainda não ligado), o seletor não aparece.
   if (!library) {
     return null
   }

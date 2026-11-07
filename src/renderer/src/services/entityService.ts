@@ -15,6 +15,7 @@ export async function createCharacterRecord(
 
   const character: CharacterRecord = {
     id: crypto.randomUUID(),
+    category: '',
     bookId,
     name: `Personagem ${characterCount + 1}`,
     aliases: '',
@@ -60,6 +61,7 @@ export async function createLocationRecord(
 
   const location: LocationRecord = {
     id: crypto.randomUUID(),
+    category: '',
     bookId,
     name: `Lugar ${locationCount + 1}`,
     locationType: '',

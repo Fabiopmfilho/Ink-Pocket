@@ -11,6 +11,7 @@ import type {
 import { getWordCount } from '../utils/textStats'
 
 export const BACKUP_APP = 'ink-pocket'
+
 export const BACKUP_FORMAT_VERSION = 1
 
 export type BackupFile = {
@@ -34,10 +35,6 @@ export type BackupSummary = {
 const DOCUMENT_TYPES: readonly DocumentType[] = ['chapter', 'scene', 'note']
 const CHARACTER_STATUSES: readonly CharacterStatus[] = ['active', 'dead', 'missing', 'unknown']
 const LOCATION_STATUSES: readonly LocationStatus[] = ['active', 'destroyed', 'abandoned', 'unknown']
-
-// ---------------------------------------------------------------------------
-// Exportar
-// ---------------------------------------------------------------------------
 
 export async function createBackup(bookId: string): Promise<BackupFile> {
   return db.transaction('r', [db.books, db.documents, db.characters, db.locations], async () => {
@@ -65,6 +62,7 @@ export async function createBackup(bookId: string): Promise<BackupFile> {
   })
 }
 
+/** suggested name: "meu-livro-backup-2026-10-13.json". */
 export function getBackupFileName(bookTitle: string): string {
   const slug = bookTitle
     .normalize('NFD')
@@ -89,10 +87,6 @@ export function summarizeBackup(backup: BackupFile): BackupSummary {
     words: writing.reduce((total, document) => total + getWordCount(document.content), 0)
   }
 }
-
-// ---------------------------------------------------------------------------
-// Validar o arquivo ao importar
-// ---------------------------------------------------------------------------
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -178,6 +172,7 @@ function normalizeCharacter(raw: unknown): CharacterRecord | null {
     aliases: readString(raw.aliases),
     role: readString(raw.role),
     age: readString(raw.age),
+    category: readString(raw.category),
     status: readOneOf(raw.status, CHARACTER_STATUSES, 'active'),
     description: readString(raw.description),
     appearance: readString(raw.appearance),
@@ -204,6 +199,7 @@ function normalizeLocation(raw: unknown): LocationRecord | null {
     name: readString(raw.name),
     locationType: readString(raw.locationType),
     region: readString(raw.region),
+    category: readString(raw.category),
     status: readOneOf(raw.status, LOCATION_STATUSES, 'active'),
     description: readString(raw.description),
     atmosphere: readString(raw.atmosphere),
@@ -260,10 +256,6 @@ export function parseBackup(text: string): BackupFile {
     locations: list(raw.locations).map(normalizeLocation).filter(isPresent)
   }
 }
-
-// ---------------------------------------------------------------------------
-// Importar como novo livro
-// ---------------------------------------------------------------------------
 
 const ID_FIELDS = new Set(['id', 'bookId', 'parentId'])
 
@@ -331,10 +323,6 @@ export async function importBackupAsNewBook(backup: BackupFile): Promise<string>
 
   return newBookId
 }
-
-// ---------------------------------------------------------------------------
-// Backup automático
-// ---------------------------------------------------------------------------
 
 export async function runAutoBackup(bookId: string): Promise<void> {
   const backup = await createBackup(bookId)

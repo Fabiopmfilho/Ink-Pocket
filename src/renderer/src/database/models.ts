@@ -46,6 +46,7 @@ export type CharacterRecord = {
   bookId: string
 
   name: string
+  category: string
   aliases: string
   role: string
   age: string
@@ -65,6 +66,7 @@ export type CharacterRecord = {
 
 export type CharacterEditableField =
   | 'name'
+  | 'category'
   | 'aliases'
   | 'role'
   | 'age'
@@ -84,6 +86,7 @@ export type LocationRecord = {
   bookId: string
 
   name: string
+  category: string
   locationType: string
   region: string
   status: LocationStatus
@@ -102,6 +105,7 @@ export type LocationRecord = {
 
 export type LocationEditableField =
   | 'name'
+  | 'category'
   | 'locationType'
   | 'region'
   | 'status'

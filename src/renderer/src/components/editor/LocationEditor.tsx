@@ -11,6 +11,8 @@ import type {
 import EntityEditor from './EntityEditor'
 import EntityReferences from './EntityReferences'
 import RichTextEditor, { type EditorSaveStatus } from './RichTextEditor'
+import CategoryField from './CategoryField'
+import { getCategoryOptions } from '@renderer/utils/categories'
 
 type LocationTab = 'overview' | 'details' | 'notes' | 'references'
 
@@ -52,6 +54,8 @@ function LocationEditor({
   const [notesStatus, setNotesStatus] = useState<EditorSaveStatus>('saved')
 
   const saveStatus = mergeSaveStatus(descriptionStatus, notesStatus)
+
+  const categoryOptions = getCategoryOptions(locations)
 
   return (
     <EntityEditor
@@ -101,6 +105,15 @@ function LocationEditor({
 
       <div className="entity-tab-panel" hidden={activeTab !== 'overview'}>
         <div className="entity-form-grid">
+          <CategoryField
+            value={location.category}
+            options={categoryOptions}
+            placeholder="Ex.: Reino de Aldor, Ilhas do Sul"
+            onChange={(category) => {
+              void onUpdate('category', category)
+            }}
+          />
+
           <label className="entity-form-field">
             <span>Tipo de lugar</span>
 
