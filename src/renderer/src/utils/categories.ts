@@ -3,9 +3,7 @@ export const UNCATEGORIZED_LABEL = 'Sem categoria'
 const UNCATEGORIZED_KEY = '__uncategorized__'
 
 export type CategoryGroup<T> = {
-  /** Identificador estável do grupo (para guardar se está recolhido). */
   key: string
-  /** Texto mostrado no título do grupo. */
   label: string
   category: string | null
   items: T[]

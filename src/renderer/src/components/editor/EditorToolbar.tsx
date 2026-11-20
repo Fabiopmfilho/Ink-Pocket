@@ -3,20 +3,12 @@ import type { ReactNode } from 'react'
 import type { Editor } from '@tiptap/react'
 import { useEditorState } from '@tiptap/react'
 import {
-  AlignCenter,
-  AlignJustify,
-  AlignLeft,
-  AlignRight,
   Bold,
-  Heading1,
-  Heading2,
-  Heading3,
   Highlighter,
   Italic,
   List,
   ListOrdered,
   Minus,
-  Pilcrow,
   Quote,
   Redo2,
   Strikethrough,
@@ -24,6 +16,7 @@ import {
   Undo2
 } from 'lucide-react'
 
+import AlignMenu, { type TextAlignValue } from './AlignMenu'
 import ColorPicker from './ColorPicker'
 import {
   editorFontFamilies,
@@ -42,7 +35,6 @@ type EditorToolbarProps = {
 type ToolbarButtonProps = {
   label: string
   shortcut?: string
-  /** Omita em botões de ação (desfazer, refazer, separador). */
   active?: boolean
   disabled?: boolean
   onClick: () => void
@@ -54,16 +46,24 @@ type ToolbarSelectProps = {
   className: string
   value: string
   options: SelectOption[]
-  resetLabel: string
-  /** Mostra cada opção na sua própria fonte (seletor de fonte). */
+  resetLabel?: string
   previewFonts?: boolean
   onChange: (value: string) => void
-  onReset: () => void
+  onReset?: () => void
 }
+
+type BlockStyle = 'paragraph' | 'h1' | 'h2' | 'h3'
 
 const iconProps = { size: 18, strokeWidth: 1.75, 'aria-hidden': true } as const
 
 const RESET_VALUE = '__reset__'
+
+const blockStyleOptions: SelectOption[] = [
+  { label: 'Parágrafo', value: 'paragraph' },
+  { label: 'Título 1', value: 'h1' },
+  { label: 'Título 2', value: 'h2' },
+  { label: 'Título 3', value: 'h3' }
+]
 
 function ToolbarButton({
   label,
@@ -108,7 +108,7 @@ function ToolbarSelect({
         const selected = event.target.value
 
         if (selected === RESET_VALUE) {
-          onReset()
+          onReset?.()
         } else if (selected !== '') {
           onChange(selected)
         }
@@ -123,7 +123,8 @@ function ToolbarSelect({
           {option.label}
         </option>
       ))}
-      <option value={RESET_VALUE}>↺ {resetLabel}</option>
+
+      {resetLabel && onReset && <option value={RESET_VALUE}>↺ {resetLabel}</option>}
     </select>
   )
 }
@@ -132,8 +133,21 @@ function Divider() {
   return <span className="editor-toolbar-divider" role="separator" />
 }
 
+function getBlockStyle(editor: Editor): BlockStyle {
+  if (editor.isActive('heading', { level: 1 })) return 'h1'
+  if (editor.isActive('heading', { level: 2 })) return 'h2'
+  if (editor.isActive('heading', { level: 3 })) return 'h3'
+
+  return 'paragraph'
+}
+
+function getTextAlign(editor: Editor): TextAlignValue {
+  const alignments = ['center', 'right', 'justify'] as const
+
+  return alignments.find((alignment) => editor.isActive({ textAlign: alignment })) ?? 'left'
+}
+
 function Toolbar({ editor }: { editor: Editor }) {
-  // useEditorState faz a toolbar atualizar a cada seleção/transação.
   const state = useEditorState({
     editor,
     selector: (ctx) => {
@@ -147,17 +161,11 @@ function Toolbar({ editor }: { editor: Editor }) {
         underline: ctx.editor.isActive('underline'),
         strike: ctx.editor.isActive('strike'),
         highlight: ctx.editor.isActive('highlight'),
-        paragraph: ctx.editor.isActive('paragraph'),
-        h1: ctx.editor.isActive('heading', { level: 1 }),
-        h2: ctx.editor.isActive('heading', { level: 2 }),
-        h3: ctx.editor.isActive('heading', { level: 3 }),
+        blockStyle: getBlockStyle(ctx.editor),
+        textAlign: getTextAlign(ctx.editor),
         bulletList: ctx.editor.isActive('bulletList'),
         orderedList: ctx.editor.isActive('orderedList'),
         blockquote: ctx.editor.isActive('blockquote'),
-        alignLeft: ctx.editor.isActive({ textAlign: 'left' }),
-        alignCenter: ctx.editor.isActive({ textAlign: 'center' }),
-        alignRight: ctx.editor.isActive({ textAlign: 'right' }),
-        alignJustify: ctx.editor.isActive({ textAlign: 'justify' }),
         fontFamily: textStyle.fontFamily,
         fontSize: textStyle.fontSize,
         color: textStyle.color
@@ -189,6 +197,16 @@ function Toolbar({ editor }: { editor: Editor }) {
         )
       : [{ label: '—', value: '' }, ...editorFontSizes]
 
+  function changeBlockStyle(value: string) {
+    const chain = editor.chain().focus()
+
+    if (value === 'paragraph') {
+      chain.setParagraph().run()
+    } else {
+      chain.setHeading({ level: Number(value.slice(1)) as 1 | 2 | 3 }).run()
+    }
+  }
+
   return (
     <div className="editor-toolbar" role="toolbar" aria-label="Formatação do texto">
       <ToolbarButton
@@ -210,6 +228,14 @@ function Toolbar({ editor }: { editor: Editor }) {
       </ToolbarButton>
 
       <Divider />
+
+      <ToolbarSelect
+        label="Estilo do parágrafo"
+        className="editor-toolbar-select--style"
+        value={state.blockStyle}
+        options={blockStyleOptions}
+        onChange={changeBlockStyle}
+      />
 
       <ToolbarSelect
         label="Fonte"
@@ -283,75 +309,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 
       <Divider />
 
-      <ToolbarButton
-        label="Parágrafo"
-        active={state.paragraph}
-        onClick={() => editor.chain().focus().setParagraph().run()}
-      >
-        <Pilcrow {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Título 1"
-        active={state.h1}
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-      >
-        <Heading1 {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Título 2"
-        active={state.h2}
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-      >
-        <Heading2 {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Título 3"
-        active={state.h3}
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-      >
-        <Heading3 {...iconProps} />
-      </ToolbarButton>
-
-      <Divider />
-
-      <ToolbarButton
-        label="Alinhar à esquerda"
-        shortcut="Ctrl+Shift+L"
-        active={state.alignLeft}
-        onClick={() => editor.chain().focus().setTextAlign('left').run()}
-      >
-        <AlignLeft {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Centralizar"
-        shortcut="Ctrl+Shift+E"
-        active={state.alignCenter}
-        onClick={() => editor.chain().focus().setTextAlign('center').run()}
-      >
-        <AlignCenter {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Alinhar à direita"
-        shortcut="Ctrl+Shift+R"
-        active={state.alignRight}
-        onClick={() => editor.chain().focus().setTextAlign('right').run()}
-      >
-        <AlignRight {...iconProps} />
-      </ToolbarButton>
-
-      <ToolbarButton
-        label="Justificar"
-        shortcut="Ctrl+Shift+J"
-        active={state.alignJustify}
-        onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-      >
-        <AlignJustify {...iconProps} />
-      </ToolbarButton>
+      <AlignMenu editor={editor} value={state.textAlign} />
 
       <Divider />
 

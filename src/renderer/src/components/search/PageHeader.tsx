@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { ChevronLeft, Search } from 'lucide-react'
+import { ChevronRight, Search } from 'lucide-react'
 
 import { HomeNavigationContext } from './HomeNavigationContext'
 import { SearchTriggerContext } from './searchTriggerContext'
@@ -8,9 +8,13 @@ import { SearchTriggerContext } from './searchTriggerContext'
 type PageHeaderProps = {
   title: string
   showHome?: boolean
+  parent?: {
+    title: string
+    onOpen: () => void
+  }
 }
 
-function PageHeader({ title, showHome = true }: PageHeaderProps) {
+function PageHeader({ title, showHome = true, parent }: PageHeaderProps) {
   const searchTrigger = useContext(SearchTriggerContext)
   const homeNavigation = useContext(HomeNavigationContext)
 
@@ -18,23 +22,51 @@ function PageHeader({ title, showHome = true }: PageHeaderProps) {
 
   return (
     <header className={showSearch ? 'editor-header page-header' : 'editor-header'}>
-      <div className="editor-header-heading">
+      <nav className="editor-header-heading" aria-label="Caminho de navegação">
         {showHome && homeNavigation && (
-          <button
-            type="button"
-            className="editor-header-home"
-            onClick={homeNavigation.onGoHome}
-            title="Voltar à visão geral"
-            aria-label="Voltar à visão geral"
-          >
-            <ChevronLeft size={15} strokeWidth={1.75} aria-hidden="true" />
+          <>
+            <button
+              type="button"
+              className="editor-header-crumb"
+              onClick={homeNavigation.onGoHome}
+              title="Voltar à visão geral"
+            >
+              Visão geral
+            </button>
 
-            <span>Visão geral</span>
-          </button>
+            <ChevronRight
+              size={14}
+              strokeWidth={1.75}
+              className="editor-header-separator"
+              aria-hidden="true"
+            />
+          </>
         )}
 
-        <span className="editor-header-title">{title}</span>
-      </div>
+        {parent && (
+          <>
+            <button
+              type="button"
+              className="editor-header-crumb"
+              onClick={parent.onOpen}
+              title={`Abrir ${parent.title}`}
+            >
+              {parent.title}
+            </button>
+
+            <ChevronRight
+              size={14}
+              strokeWidth={1.75}
+              className="editor-header-separator"
+              aria-hidden="true"
+            />
+          </>
+        )}
+
+        <span className="editor-header-title" aria-current="page">
+          {title}
+        </span>
+      </nav>
 
       {showSearch && (
         <button

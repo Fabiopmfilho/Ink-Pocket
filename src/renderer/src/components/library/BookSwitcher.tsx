@@ -12,7 +12,6 @@ type MenuPosition = {
 }
 
 function BookSwitcherMenu({ books, activeBookId, onSelectBook, onCreateBook }: BookLibraryValue) {
-  // null = fechado. A lista é desenhada fora da sidebar (portal) para não ser cortada por ela.
   const [position, setPosition] = useState<MenuPosition | null>(null)
 
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -150,7 +149,6 @@ function BookSwitcherMenu({ books, activeBookId, onSelectBook, onCreateBook }: B
 function BookSwitcher() {
   const library = useContext(BookLibraryContext)
 
-  // Sem provider (App ainda não ligado), o seletor não aparece.
   if (!library) {
     return null
   }

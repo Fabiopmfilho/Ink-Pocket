@@ -38,7 +38,6 @@ function EntityList<T extends EntityListItem>({
 
   const groups = groupByCategory(items)
 
-  // Enquanto ninguém tem categoria, a lista continua simples, sem títulos de grupo.
   const hasCategories = groups.some((group) => group.category !== null)
 
   function toggleGroup(key: string) {
@@ -91,7 +90,6 @@ function EntityList<T extends EntityListItem>({
       {groups.map((group) => {
         const collapsed = collapsedGroups.has(group.key)
 
-        // "Sem categoria" fica na cor neutra; as demais ganham uma cor própria.
         const groupStyle =
           group.category === null
             ? undefined

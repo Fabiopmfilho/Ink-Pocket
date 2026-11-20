@@ -183,7 +183,7 @@
   background: #fff;
 }
 
-/* ---------- Seletor de cor ---------- */
+/* ---------- Color select ---------- */
 
 .color-picker {
   position: relative;
@@ -283,7 +283,7 @@
   font-size: 13px;
 }
 
-/* ---------- Conteúdo do editor ---------- */
+/* ---------- editor ---------- */
 
 .editor-document {
   min-height: 500px;
@@ -370,7 +370,7 @@
   background: #b8b8b3;
 }
 
-/* Trecho destacado (extensão Highlight) */
+/* (Highlight) */
 .editor-document mark {
   background-color: rgba(250, 204, 21, 0.35);
   color: inherit;
@@ -639,50 +639,158 @@
   line-height: 1.5;
 }
 
+/* ---------- Header: (breadcrumb) ---------- */
+
 .editor-header-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 2px;
   min-width: 0;
 }
 
-.editor-header-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.editor-header .editor-header-home {
+.editor-header .editor-header-crumb {
+  appearance: none;
   display: inline-flex;
-  flex: none;
+  flex: 0 1 auto;
   align-items: center;
-  gap: 2px;
-  height: 28px;
-  padding: 0 10px 0 6px;
+  min-width: 0;
+  max-width: 220px;
+  height: 30px;
+  margin: 0;
+  padding: 0 8px;
+  overflow: hidden;
   border: 0;
   border-radius: 6px;
+  box-shadow: none;
   background: transparent;
-  color: #666;
+  color: #7a7a75;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
+  letter-spacing: normal;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
   cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
 }
 
-.editor-header .editor-header-home:hover {
+.editor-header .editor-header-crumb:hover {
   background: #f0f0ed;
   color: #292929;
 }
 
-.editor-header .editor-header-home:focus-visible {
+.editor-header .editor-header-crumb:focus-visible {
   outline: 2px solid #55458a;
   outline-offset: 1px;
 }
 
-.editor-header .editor-header-home + .editor-header-title {
-  padding-left: 12px;
-  border-left: 1px solid #dedede;
-  line-height: 18px;
+.editor-header-separator {
+  flex: none;
+  margin: 0 1px;
+  color: #c4c4bf;
+}
+
+.editor-header-title {
+  min-width: 0;
+  padding: 0 8px;
+  overflow: hidden;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-header-heading > .editor-header-title:first-child {
+  padding-left: 0;
+}
+
+/* ---------- Toolbar ---------- */
+
+.editor-toolbar .editor-toolbar-select {
+  appearance: none;
+  box-sizing: border-box;
+  height: 30px;
+  margin: 0;
+  padding: 0 26px 0 10px;
+  border: 1px solid #e0dfdb;
+  border-radius: 6px;
+  background-color: #f6f6f3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  color: #333;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.editor-toolbar .editor-toolbar-select:hover {
+  border-color: #d3d2cd;
+  background-color: #efeeea;
+}
+
+.editor-toolbar .editor-toolbar-select:focus-visible {
+  border-color: #8d82ae;
+  background-color: #fff;
+  outline: 2px solid rgba(85, 69, 138, 0.25);
+  outline-offset: 1px;
+}
+
+.editor-toolbar .editor-toolbar-select option {
+  background: #fff;
+  color: #292929;
+  font-size: 13px;
+}
+
+.editor-toolbar-select--style {
+  width: 8rem;
+}
+
+.editor-toolbar-select--font {
+  width: 9.5rem;
+}
+
+.editor-toolbar-select--size {
+  width: 4.75rem;
+}
+
+.editor-toolbar .align-menu {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.editor-toolbar .align-menu-trigger {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 46px;
+}
+
+.editor-toolbar .align-menu-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 900px) {

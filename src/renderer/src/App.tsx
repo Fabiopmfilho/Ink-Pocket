@@ -177,6 +177,10 @@ function App() {
         .sort((first, second) => first.order - second.order)
     : []
 
+  const parentChapter = activeScene?.parentId
+    ? documents.find((document) => document.id === activeScene.parentId)
+    : undefined
+
   const sceneWordCount = activeScene ? getWordCount(activeScene.content) : 0
 
   const sceneCharacterCount = activeScene ? getCharacterCount(activeScene.content) : 0
@@ -560,6 +564,15 @@ function App() {
                     characters={characters}
                     locations={locations}
                     wordCount={sceneWordCount}
+                    parent={
+                      parentChapter
+                        ? {
+                            title: parentChapter.title || 'Capítulo sem título',
+                            onOpen: () =>
+                              void setSelection({ type: 'document', id: parentChapter.id })
+                          }
+                        : undefined
+                    }
                     onUpdate={(field, value) => updateDocument(field, value)}
                     onOpenReference={openReference}
                   />

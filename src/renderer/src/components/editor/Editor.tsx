@@ -12,6 +12,7 @@ type EditorProps = {
   characters: CharacterRecord[]
   locations: LocationRecord[]
   wordCount: number
+  parent?: { title: string; onOpen: () => void }
   onUpdate: (field: 'title' | 'content', value: string) => void | Promise<void>
   onOpenReference: (entityId: string) => void
 }
@@ -31,6 +32,7 @@ function Editor({
   characters,
   locations,
   wordCount,
+  parent,
   onUpdate,
   onOpenReference
 }: EditorProps) {
@@ -57,7 +59,7 @@ function Editor({
 
   return (
     <main className="editor-area">
-      <PageHeader title={title || fallbackTitle} />
+      <PageHeader title={title || fallbackTitle} parent={parent} />
 
       <div className="editor-toolbar-slot" ref={setToolbarSlot} />
 
